@@ -1,0 +1,56 @@
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Backup files
+*~
+*.bak
+*.swp
+*.swo
+*.tmp
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# IDE - JetBrains
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+*.sln.iml
+
+# IDE - Eclipse
+.classpath
+.project
+.settings/
+
+# Neovim specific
+doc/tags
+doc/tags-*
+doc/luadoc/
+
+# Lua specific
+luac.out
+*.src.rock
+*.zip
+*.tar.gz
+
+# nix
+result
+result-*
+
+# direnv
+.direnv/
+
+# ai
+.ai/
