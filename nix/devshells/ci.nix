@@ -5,7 +5,7 @@
 pkgs.mkShellNoCC {
   packages = [
     # neovim with plenary for tests
-    perSystem.self.neovim-test
+    perSystem.self.nvim-test
 
     # tools
     pkgs.luaPackages.luacheck
