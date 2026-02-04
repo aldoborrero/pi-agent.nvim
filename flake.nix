@@ -32,13 +32,16 @@
 
   outputs =
     inputs:
-    inputs.blueprint {
-      inherit inputs;
-      prefix = ./nix;
-      nixpkgs.config.allowUnfree = true;
-      systems = [
-        "aarch64-linux"
-        "x86_64-linux"
-      ];
+    let
+      blueprintOutputs = inputs.blueprint {
+        inherit inputs;
+        nixpkgs.config.allowUnfree = true;
+      };
+    in
+    blueprintOutputs
+    // {
+      overlays.default = import ./overlays {
+        inherit (blueprintOutputs) packages;
+      };
     };
 }
