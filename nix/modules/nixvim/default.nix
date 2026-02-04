@@ -1,12 +1,12 @@
 {
   lib,
-  helpers,
   config,
   pkgs,
   ...
 }:
 let
   cfg = config.plugins.pi-agent;
+  helpers = lib.nixvim;
 in
 {
   options.plugins.pi-agent = helpers.neovim-plugin.extraOptionsOptions // {
