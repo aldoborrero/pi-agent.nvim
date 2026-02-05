@@ -75,8 +75,8 @@ require("pi-agent").setup({
       normal = "<C-,>",
       terminal = "<C-,>",
       variants = {
-        continue = "<leader>cC",
-        verbose = "<leader>cV",
+        continue = "<leader>pC",
+        verbose = "<leader>pV",
       },
     },
     window_navigation = true,
@@ -101,8 +101,8 @@ require("pi-agent").setup({
 | Key | Mode | Description |
 |-----|------|-------------|
 | `<C-,>` | Normal/Terminal | Toggle Pi Agent |
-| `<leader>cC` | Normal | Toggle with `--continue` |
-| `<leader>cV` | Normal | Toggle with `--verbose` |
+| `<leader>pC` | Normal | Toggle with `--continue` |
+| `<leader>pV` | Normal | Toggle with `--verbose` |
 | `<C-h/j/k/l>` | Terminal | Window navigation |
 | `<C-f/b>` | Terminal | Page up/down |
 

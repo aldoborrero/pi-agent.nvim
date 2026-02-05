@@ -113,8 +113,8 @@ M.default_config = {
       normal = '<C-,>', -- Normal mode keymap for toggling Pi Agent
       terminal = '<C-,>', -- Terminal mode keymap for toggling Pi Agent
       variants = {
-        continue = '<leader>cC', -- Normal mode keymap for Pi Agent with continue flag
-        verbose = '<leader>cV', -- Normal mode keymap for Pi Agent with verbose flag
+        continue = '<leader>pC', -- Normal mode keymap for Pi Agent with continue flag
+        verbose = '<leader>pV', -- Normal mode keymap for Pi Agent with verbose flag
       },
     },
     window_navigation = true, -- Enable window navigation keymaps (<C-h/j/k/l>)

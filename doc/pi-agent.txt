@@ -56,8 +56,8 @@ Using lazy.nvim:
 Default mappings:
 
   <C-,>        Toggle Pi Agent (normal and terminal modes)
-  <leader>cC   Toggle with --continue flag
-  <leader>cV   Toggle with --verbose flag
+  <leader>pC   Toggle with --continue flag
+  <leader>pV   Toggle with --verbose flag
 
 Terminal window navigation:
 
@@ -104,8 +104,8 @@ Terminal window navigation:
         normal = "<C-,>",
         terminal = "<C-,>",
         variants = {
-          continue = "<leader>cC",
-          verbose = "<leader>cV",
+          continue = "<leader>pC",
+          verbose = "<leader>pV",
         },
       },
       window_navigation = true,
