@@ -6,10 +6,10 @@
 }:
 let
   cfg = config.plugins.pi-agent;
-  helpers = lib.nixvim;
+  nixvim = lib.nixvim;
 in
 {
-  options.plugins.pi-agent = helpers.neovim-plugin.extraOptionsOptions // {
+  options.plugins.pi-agent = nixvim.plugins.neovim.extraOptionsOptions // {
     enable = lib.mkEnableOption "pi-agent.nvim plugin";
 
     package = lib.mkPackageOption pkgs.vimPlugins "pi-agent-nvim" {
@@ -20,87 +20,87 @@ in
       '';
     };
 
-    settings = helpers.mkSettingsOption {
+    settings = nixvim.mkSettingsOption {
       description = "Settings for pi-agent.nvim";
       options = {
         window = {
-          split_ratio = helpers.defaultNullOpts.mkNum 0.3 ''
+          split_ratio = nixvim.defaultNullOpts.mkNum 0.3 ''
             Percentage of screen for the terminal window.
           '';
 
-          position = helpers.defaultNullOpts.mkStr "botright" ''
+          position = nixvim.defaultNullOpts.mkStr "botright" ''
             Position of the window: "botright", "topleft", "vertical", "float".
           '';
 
-          enter_insert = helpers.defaultNullOpts.mkBool true ''
+          enter_insert = nixvim.defaultNullOpts.mkBool true ''
             Whether to enter insert mode when opening Pi Agent.
           '';
 
-          hide_numbers = helpers.defaultNullOpts.mkBool true ''
+          hide_numbers = nixvim.defaultNullOpts.mkBool true ''
             Hide line numbers in the terminal window.
           '';
 
-          hide_signcolumn = helpers.defaultNullOpts.mkBool true ''
+          hide_signcolumn = nixvim.defaultNullOpts.mkBool true ''
             Hide the sign column in the terminal window.
           '';
 
           float = {
-            width = helpers.defaultNullOpts.mkStr "80%" ''
+            width = nixvim.defaultNullOpts.mkStr "80%" ''
               Width of floating window.
             '';
 
-            height = helpers.defaultNullOpts.mkStr "80%" ''
+            height = nixvim.defaultNullOpts.mkStr "80%" ''
               Height of floating window.
             '';
 
-            row = helpers.defaultNullOpts.mkStr "center" ''
+            row = nixvim.defaultNullOpts.mkStr "center" ''
               Row position.
             '';
 
-            col = helpers.defaultNullOpts.mkStr "center" ''
+            col = nixvim.defaultNullOpts.mkStr "center" ''
               Column position.
             '';
 
-            relative = helpers.defaultNullOpts.mkStr "editor" ''
+            relative = nixvim.defaultNullOpts.mkStr "editor" ''
               Relative positioning: "editor" or "cursor".
             '';
 
-            border = helpers.defaultNullOpts.mkStr "rounded" ''
+            border = nixvim.defaultNullOpts.mkStr "rounded" ''
               Border style.
             '';
           };
         };
 
         refresh = {
-          enable = helpers.defaultNullOpts.mkBool true ''
+          enable = nixvim.defaultNullOpts.mkBool true ''
             Enable file change detection.
           '';
 
-          updatetime = helpers.defaultNullOpts.mkNum 100 ''
+          updatetime = nixvim.defaultNullOpts.mkNum 100 ''
             updatetime when Pi Agent is active (milliseconds).
           '';
 
-          timer_interval = helpers.defaultNullOpts.mkNum 1000 ''
+          timer_interval = nixvim.defaultNullOpts.mkNum 1000 ''
             How often to check for file changes (milliseconds).
           '';
 
-          show_notifications = helpers.defaultNullOpts.mkBool true ''
+          show_notifications = nixvim.defaultNullOpts.mkBool true ''
             Show notification when files are reloaded.
           '';
         };
 
         git = {
-          use_git_root = helpers.defaultNullOpts.mkBool true ''
+          use_git_root = nixvim.defaultNullOpts.mkBool true ''
             Set CWD to git root when opening Pi Agent.
           '';
         };
 
-        command = helpers.defaultNullOpts.mkStr "pi" ''
+        command = nixvim.defaultNullOpts.mkStr "pi" ''
           Command used to launch Pi Agent.
         '';
 
         command_variants =
-          helpers.defaultNullOpts.mkAttrsOf lib.types.str
+          nixvim.defaultNullOpts.mkAttrsOf lib.types.str
             {
               continue = "--continue";
               resume = "--resume";
@@ -113,33 +113,33 @@ in
         keymaps = {
           toggle = {
             normal =
-              helpers.defaultNullOpts.mkNullable (lib.types.either lib.types.str lib.types.bool) "<C-,>"
+              nixvim.defaultNullOpts.mkNullable (lib.types.either lib.types.str lib.types.bool) "<C-,>"
                 ''
                   Normal mode keymap for toggling Pi Agent, or false to disable.
                 '';
 
             terminal =
-              helpers.defaultNullOpts.mkNullable (lib.types.either lib.types.str lib.types.bool) "<C-,>"
+              nixvim.defaultNullOpts.mkNullable (lib.types.either lib.types.str lib.types.bool) "<C-,>"
                 ''
                   Terminal mode keymap for toggling Pi Agent, or false to disable.
                 '';
 
             variants =
-              helpers.defaultNullOpts.mkAttrsOf lib.types.str
+              nixvim.defaultNullOpts.mkAttrsOf lib.types.str
                 {
-                  continue = "<leader>cC";
-                  verbose = "<leader>cV";
+                  continue = "<leader>pC";
+                  verbose = "<leader>pV";
                 }
                 ''
                   Variant keymaps.
                 '';
           };
 
-          window_navigation = helpers.defaultNullOpts.mkBool true ''
+          window_navigation = nixvim.defaultNullOpts.mkBool true ''
             Enable window navigation keymaps.
           '';
 
-          scrolling = helpers.defaultNullOpts.mkBool true ''
+          scrolling = nixvim.defaultNullOpts.mkBool true ''
             Enable scrolling keymaps.
           '';
         };
@@ -150,6 +150,21 @@ in
   config = lib.mkIf cfg.enable {
     extraPlugins =
       let
+        cleanSrc = lib.cleanSourceWith {
+          src = ../../..;
+          filter =
+            path: type:
+            let
+              baseName = baseNameOf path;
+            in
+            !(
+              baseName == ".direnv"
+              || baseName == ".ai"
+              || baseName == ".git"
+              || baseName == "result"
+              || lib.hasSuffix ".qcow2" baseName
+            );
+        };
         pkg =
           if cfg.package != null then
             cfg.package
@@ -157,13 +172,13 @@ in
             pkgs.vimUtils.buildVimPlugin {
               pname = "pi-agent-nvim";
               version = "0.1.0";
-              src = ../../..;
+              src = cleanSrc;
             };
       in
       [ pkg ];
 
     extraConfigLua = ''
-      require("pi-agent").setup(${helpers.toLuaObject cfg.settings})
+      require("pi-agent").setup(${nixvim.toLuaObject cfg.settings})
     '';
   };
 }
