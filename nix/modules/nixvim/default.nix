@@ -6,7 +6,7 @@
 }:
 let
   cfg = config.plugins.pi-agent;
-  nixvim = lib.nixvim;
+  inherit (lib) nixvim;
 in
 {
   options.plugins.pi-agent = nixvim.plugins.neovim.extraOptionsOptions // {
@@ -153,7 +153,7 @@ in
         cleanSrc = lib.cleanSourceWith {
           src = ../../..;
           filter =
-            path: type:
+            path: _type:
             let
               baseName = baseNameOf path;
             in
